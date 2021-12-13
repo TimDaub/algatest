@@ -26,6 +26,7 @@ const defaultConfig = {
   gasFeeMultiplier: 1,
 	networkId: 4,
   network: 'rinkeby',
+  infuraId: 'c5ada3e623654993b6298eda8d20d5a3',
   nodeUri: 'https://rinkeby.infura.io/v3/c5ada3e623654993b6298eda8d20d5a3',
   providerUri: 'https://provider.rinkeby.oceanprotocol.com',
   subgraphUri: 'https://subgraph.rinkeby.oceanprotocol.com',
@@ -51,49 +52,36 @@ const shouldDeployContract = async (web3, abi, data, from: string) => {
 export default function App(): JSX.Element {
   const connector = useWalletConnect();
   const [message, setMessage] = React.useState("Loading...");
-  const web3 = React.useMemo(
-    () =>
-      new Web3(
-        new Web3.providers.HttpProvider(defaultConfig.nodeUri)
-      ),
-    [HARDHAT_PORT]
-  );
-  React.useEffect(() => {
-    void (async () => {
-      //const config = {
-      //  ...defaultConfig,
-      //  web3provider: web3
-      //};
-      //const ocean = await Ocean.getInstance(config);
-      //const datatoken = new DataTokens(
-      //  "0x57317f97E9EA49eBd19f7c9bB7c180b8cDcbDeB9",
-      //  factoryABI,
-      //  datatokensABI,
-      //  web3
-      //);
-      //const tokenAddress = await datatoken.create(blob, alice);
-      //console.log(`Deployed datatoken address: ${tokenAddress}`);
-
-
-
-
-      //const { address } = await web3.eth.accounts.privateKeyToAccount(
-      //  HARDHAT_PRIVATE_KEY
-      //);
-      //const contract = await shouldDeployContract(
-      //  web3,
-      //  Hello.abi,
-      //  Hello.bytecode,
-      //  address
-      //);
-      //setMessage(await contract.methods.sayHello("React Native").call());
-    })();
-  }, [web3, shouldDeployContract, setMessage, HARDHAT_PRIVATE_KEY]);
+  //const web3 = React.useMemo(
+  //  () =>
+  //    new Web3(
+  //      new Web3.providers.HttpProvider(defaultConfig.nodeUri)
+  //    ),
+  //  [HARDHAT_PORT]
+  //);
+  //React.useEffect(() => {
+  //    //const { address } = await web3.eth.accounts.privateKeyToAccount(
+  //    //  HARDHAT_PRIVATE_KEY
+  //    //);
+  //    //const contract = await shouldDeployContract(
+  //    //  web3,
+  //    //  Hello.abi,
+  //    //  Hello.bytecode,
+  //    //  address
+  //    //);
+  //    //setMessage(await contract.methods.sayHello("React Native").call());
+  //  })();
+  //}, [web3, shouldDeployContract, setMessage, HARDHAT_PRIVATE_KEY]);
   const connectWallet = React.useCallback(() => {
     return connector.connect();
   }, [connector]);
   const signTransaction = React.useCallback(async () => {
 			console.log("attempting to sign");
+      const provider = new WalletConnectProvider({
+        infuraId: defaultConfig.infuraId
+      });
+      await provider.enable();
+      const web3 = new Web3(provider);
       const config = {
         ...defaultConfig,
         web3Provider: web3
@@ -107,8 +95,9 @@ console.log(ocean);
         web3
       );
       const blob = `http://localhost:8030/api/v1/services/consume`;
-			const addr = '0xd22660b6993df5b05Dd85e1Ba6fb19f6acdf18Ee'
-      const tokenAddress = await datatoken.create(blob, addr);
+      const accounts = await ocean.accounts.list();
+      const alice = accounts[0].id;
+      const tokenAddress = await datatoken.create(blob, alice);
       //console.log(`Deployed datatoken address: ${tokenAddress}`);
     //try {
     //  await connector.signTransaction({
