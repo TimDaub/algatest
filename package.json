@@ -3,6 +3,7 @@
     "@oceanprotocol/lib": "0.20.1",
     "@react-native-async-storage/async-storage": "1.13.4",
     "@walletconnect/react-native-dapp": "1.6.1",
+    "@walletconnect/web3-provider": "1.7.0",
     "base-64": "1.0.0",
     "buffer": "6.0.3",
     "expo": "^43.0.0",
@@ -16,6 +17,7 @@
     "react-native": "0.64.3",
     "react-native-crypto": "2.2.0",
     "react-native-dotenv": "2.4.3",
+    "react-native-fs": "2.18.0",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-get-random-values": "1.5.0",
     "react-native-localhost": "1.0.0",
@@ -100,6 +102,7 @@
     "react-native-web"
   ],
   "react-native": {
+    "fs": "react-native-fs",
     "stream": "react-native-stream",
     "crypto": "react-native-crypto",
     "path": "path-browserify",
